@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{post.business_name}}</title>
+    
+    <!-- Bootstrap 5 CSS via CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        .b-example-divider {
+  height: 3rem;
+  background-color: rgba(0, 0, 0, .1);
+  border: solid rgba(0, 0, 0, .15);
+  border-width: 1px 0;
+  box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+}
+
+.bi {
+  vertical-align: -.125em;
+  fill: currentColor;
+}
+
+.feature-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  color: #fff;
+  border-radius: .75rem;
+}
+
+.icon-link {
+  display: inline-flex;
+  align-items: center;
+}
+.icon-link > .bi {
+  margin-top: .125rem;
+  margin-left: .125rem;
+  transition: transform .25s ease-in-out;
+  fill: currentColor;
+}
+.icon-link:hover > .bi {
+  transform: translate(.25rem);
+}
+
+.icon-square {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  font-size: 1.5rem;
+  border-radius: .75rem;
+}
+
+.rounded-4 { border-radius: .5rem; }
+.rounded-5 { border-radius: 1rem; }
+
+.text-shadow-1 { text-shadow: 0 .125rem .25rem rgba(0, 0, 0, .25); }
+.text-shadow-2 { text-shadow: 0 .25rem .5rem rgba(0, 0, 0, .25); }
+.text-shadow-3 { text-shadow: 0 .5rem 1.5rem rgba(0, 0, 0, .25); }
+
+.card-cover {
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+.bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+</head>
+<body>
+    <div class="container-sm">
+        <div class="row b-card mt-2">
+            <div class="col-sm">
+              <img src ="/{{folder}}/logo.jpeg" alt="{{post.business_name}} logo">
+
+
+              <p class="display-6 mt-1">{{ post.headline1 }}</p>
+          <!-- <h2 class="display-1">{{post.business_name}}</h2> -->
+              
+            </div>
+            <div class="col-sm"> 
+              
+              
+              
+              <address>
+                <p class="display-6">{{post.business_name}}</p>
+                <a href="tel:" target="_blank" style="display:inline-block" class=""><i class="bi bi-whatsapp display-6 text-center" ></i></a>
+                <a class="display-6" href="mailto:{{post.contact_email}}">{{post.json_html.0.emails}}</a>
+                <p class="display-6">Address: {{post.json_html.0.addresses}}</p>
+              </address>
+
+            </div>
+        </div>
+    </div>
+    <!-- Navbar Section -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <!-- <a class="navbar-brand" href="#">Services</a> -->
+            <!-- Add your navigation links here -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link 1</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link 2</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link 3</a>
+                </li>
+        </div>
+            </nav>
+
+    <!-- Hero Section -->
+    <header class="bg-primary text-white text-center py-5">
+        <h1>Welcome to My Website</h1>
+        <p class="lead">A simple and accessible website built with Bootstrap 5</p>
+    </header>
+
+    <!-- Team Section -->
+    <section class="container my-5">
+        <h2 class="text-center mb-4">Meet Our Team</h2>
+        <div class="row">
+            <!-- Team members cards go here -->
+            <!-- Example card: -->
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">John Doe</h5>
+                        <p class="strong">Web Developer</p>
+                        <p class="card-text">"Lorem ipsum dolor sit amet, consectetur adipiscing elit."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <div class="container px-4 py-5" id="custom-cards">
+        <h2 class="pb-2 border-bottom">Custom cards</h2>
+    
+        <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
+          <div class="col">
+            <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg" style="background-image: url('unsplash-photo-1.jpg');">
+              <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+                <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Short title, long jacket</h2>
+                <ul class="d-flex list-unstyled mt-auto">
+                  <li class="me-auto">
+                    <img src="https://github.com/twbs.png" alt="Bootstrap" width="32" height="32" class="rounded-circle border border-white">
+                  </li>
+                  <li class="d-flex align-items-center me-3">
+                    <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"/></svg>
+                    <small>Earth</small>
+                  </li>
+                  <li class="d-flex align-items-center">
+                    <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#calendar3"/></svg>
+                    <small>3d</small>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+    
+          <div class="col">
+            <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg" style="background-image: url('unsplash-photo-2.jpg');">
+              <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+                <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Much longer title that wraps to multiple lines</h2>
+                <ul class="d-flex list-unstyled mt-auto">
+                  <li class="me-auto">
+                    <img src="https://github.com/twbs.png" alt="Bootstrap" width="32" height="32" class="rounded-circle border border-white">
+                  </li>
+                  <li class="d-flex align-items-center me-3">
+                    <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"/></svg>
+                    <small>Pakistan</small>
+                  </li>
+                  <li class="d-flex align-items-center">
+                    <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#calendar3"/></svg>
+                    <small>4d</small>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+    
+          <div class="col">
+            <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg" style="background-image: url('unsplash-photo-3.jpg');">
+              <div class="d-flex flex-column h-100 p-5 pb-3 text-shadow-1">
+                <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Another longer title belongs here</h2>
+                <ul class="d-flex list-unstyled mt-auto">
+                  <li class="me-auto">
+                    <img src="https://github.com/twbs.png" alt="Bootstrap" width="32" height="32" class="rounded-circle border border-white">
+                  </li>
+                  <li class="d-flex align-items-center me-3">
+                    <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"/></svg>
+                    <small>California</small>
+                  </li>
+                  <li class="d-flex align-items-center">
+                    <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#calendar3"/></svg>
+                    <small>5d</small>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+    <!-- Testimonials Section -->
+    <section class="bg-light py-5">
+        <div class="container">
+            <h2 class="text-center mb-4">Client Testimonials</h2>
+            <!-- Testimonials carousel goes here -->
+            <!-- Example carousel: -->
+            <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <!-- Testimonial items go here -->
+                    <!-- Example testimonial item: -->
+                    <div class="carousel-item active">
+                        <p class="lead">"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin fringilla justo id fermentum ultricies."</p>
+                        <p class="font-weight-bold">- Client Name</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Image Gallery Section -->
+    <section class="container my-5">
+        <h2 class="text-center mb-4">Image Gallery</h2>
+        <div class="row">
+            <!-- Image gallery items go here -->
+            <!-- Example gallery item: -->
+            <div class="col-md-4 mb-4">
+                <img src="https://via.placeholder.com/300" class="img-fluid" alt="Gallery Image">
+            </div>
+        </div>
+    </section>
+
+    <!-- Image Slider Section -->
+    <section class="bg-dark text-white py-5">
+        <div class="container">
+            <h2 class="text-center mb-4">Image Slider</h2>
+            <!-- Image slider goes here -->
+            <!-- Example slider: -->
+            <div id="imageSlider" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <!-- Slider items go here -->
+                    <!-- Example slider item: -->
+                    <div class="carousel-item active">
+                        <img src="https://via.placeholder.com/1200x400" class="d-block w-100" alt="Slider Image">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Accordion Section -->
+    <section class="container my-5">
+        <h2 class="text-center mb-4">Frequently Asked Questions</h2>
+        <!-- Accordion goes here -->
+        <div class="accordion" id="faqAccordion">
+            <!-- Accordion items go here -->
+            <!-- Example accordion item: -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="faqHeading1">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse1" aria-expanded="true" aria-controls="faqCollapse1">
+                        Question 1
+                    </button>
+                </h2>
+                <div id="faqCollapse1" class="accordion-collapse collapse show" aria-labelledby="faqHeading1" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Answer to Question 1.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="bg-dark text-white text-center py-3">
+        <p>&copy; 2024 My Website</p>
+    </footer>
+
+    <!-- Bootstrap 5 JS and Popper.js via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

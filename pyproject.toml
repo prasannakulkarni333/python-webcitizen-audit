@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "myproject"
+version = "0.1.0"
+description = "My project"
+readme = "README.md"
+
+
+[project.urls]
+homepage = "https://github.com/pypa/sampleproject"
