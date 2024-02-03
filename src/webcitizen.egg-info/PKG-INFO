@@ -1,7 +1,7 @@
 Metadata-Version: 2.1
-Name: myproject
+Name: webcitizen
 Version: 0.1.0
-Summary: My project
+Summary: SEO audits for websites
 Project-URL: homepage, https://github.com/pypa/sampleproject
 Description-Content-Type: text/markdown
 License-File: LICENSE

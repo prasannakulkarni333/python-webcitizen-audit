@@ -3,11 +3,11 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "myproject"
+name = "webcitizen"
 version = "0.1.0"
-description = "My project"
+description = "SEO audits for websites"
 readme = "README.md"
 
 
 [project.urls]
-homepage = "https://github.com/pypa/sampleproject"
+homepage = "https://github.com/prasannakulkarni333/python-webcitizen-audit"
