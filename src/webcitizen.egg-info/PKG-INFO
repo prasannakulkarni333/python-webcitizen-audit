@@ -1,10 +1,17 @@
 Metadata-Version: 2.1
 Name: webcitizen
-Version: 0.1.0
-Summary: SEO audits for websites
-Project-URL: homepage, https://github.com/pypa/sampleproject
+Version: 0.0.2
+Summary: SEO audits for websites using Python.
+Author-email: Prasanna Kulkarni <prasanna.k158@gmail.com>
+Project-URL: Homepage, https://github.com/prasannakulkarni333/python-webcitizen-audit
+Project-URL: Documentation, https://github.com/prasannakulkarni333/python-webcitizen-audit
+Project-URL: Repository, https://github.com/prasannakulkarni333/python-webcitizen-audit
+Project-URL: Issues, https://github.com/prasannakulkarni333/python-webcitizen-audit/issues
+Keywords: seo,accessibility,webcitizen,webcitizen-audit,webcitizen-python,webcitizen-seo,webcitizen-audit-python
 Description-Content-Type: text/markdown
 License-File: LICENSE
+Requires-Dist: beautifulsoup4
+Requires-Dist: newspaper3k
 
 Not yet ready to be used. This is a work in progress.
 
