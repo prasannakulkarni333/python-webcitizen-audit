@@ -17,4 +17,4 @@ This page contains the documentation for the webcitizen package and its modules.
    
 .. note::
 
-   This project is under active development.
+   This projectt is under active development.
