@@ -6,10 +6,10 @@ def responsive_check(html:str):
     """
     Check if the website is responsive
     Args:
-        html (str): html content of the website
+    html (str): html content of the website
     Returns:
-        int: score
-        list: message
+    int: score
+    list: message
     """    
     x = bs4.BeautifulSoup(html, 'html.parser')
     # get meta viewport tag value
@@ -32,10 +32,10 @@ def searchengine_check(html:str):
     """
     Check if the website is search engine friendly
     Args:
-        html (str): html content of the website
+    html (str): html content of the website
     Returns:
-        int: score
-        list: message
+    int: score
+    list: message
     """
     x = bs4.BeautifulSoup(html, 'html.parser')
     # get meta viewport tag value
