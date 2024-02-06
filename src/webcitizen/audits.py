@@ -29,6 +29,14 @@ def responsive_check(html:str):
     return score, message
 
 def searchengine_check(html:str):
+    """
+    Check if the website is search engine friendly
+    Args:
+        html (str): html content of the website
+    Returns:
+        int: score
+        list: message
+    """
     x = bs4.BeautifulSoup(html, 'html.parser')
     # get meta viewport tag value
     message = []
@@ -43,5 +51,3 @@ def searchengine_check(html:str):
         message.append('H1 tag is present')
     
     return score, message
-
-print(searchengine_check(html_text_to_check))
