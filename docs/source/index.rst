@@ -1,9 +1,7 @@
 webcitizen documentation - Python pypi package
 ==============================================
 
-webcitizen documentation
-++++++++++++++++++++++++
-
+This page contains the documentation for the webcitizen package and its modules.
 
 .. automodule:: webcitizen.audits
    :members:
