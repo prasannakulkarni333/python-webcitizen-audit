@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "webcitizen"
-version = "0.0.35"
+version = "0.0.36"
 description = "SEO audits for websites using Python."
 readme = "README.md"
 keywords = ["seo","accessibility","webcitizen", "webcitizen-audit", "webcitizen-python", "webcitizen-seo", "webcitizen-audit-python"]
@@ -18,6 +18,6 @@ authors = [
 
 [project.urls]
 Homepage = "https://github.com/prasannakulkarni333/python-webcitizen-audit"
-Documentation = "https://github.com/prasannakulkarni333/python-webcitizen-audit"
+Documentation = "https://webcitizen.prasannakulkarni.com"
 Repository = "https://github.com/prasannakulkarni333/python-webcitizen-audit"
 Issues = "https://github.com/prasannakulkarni333/python-webcitizen-audit/issues"

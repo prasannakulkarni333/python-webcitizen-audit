@@ -1,10 +1,10 @@
 Metadata-Version: 2.1
 Name: webcitizen
-Version: 0.0.35
+Version: 0.0.36
 Summary: SEO audits for websites using Python.
 Author-email: Prasanna Kulkarni <prasanna.k158@gmail.com>
 Project-URL: Homepage, https://github.com/prasannakulkarni333/python-webcitizen-audit
-Project-URL: Documentation, https://github.com/prasannakulkarni333/python-webcitizen-audit
+Project-URL: Documentation, https://webcitizen.prasannakulkarni.com
 Project-URL: Repository, https://github.com/prasannakulkarni333/python-webcitizen-audit
 Project-URL: Issues, https://github.com/prasannakulkarni333/python-webcitizen-audit/issues
 Keywords: seo,accessibility,webcitizen,webcitizen-audit,webcitizen-python,webcitizen-seo,webcitizen-audit-python
@@ -21,3 +21,10 @@ TODO - The audits are based on the Web Content Accessibility Guidelines (WCAG) 2
 
 # python-webcitizen-audit
 Python library. HTML is the input, a set of audits are performed. Results are returned in a score or detailed score.
+
+
+## Release
+
+
+python -m build
+python -m twine upload --config-file "./.pypirc" --repository pypi dist/*
