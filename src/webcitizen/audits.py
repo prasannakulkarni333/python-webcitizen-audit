@@ -6,6 +6,8 @@ from webpage import WebPage
 
 class Audit(WebPage):
 
+    # TODO: Audit canonical
+
     def analyze_meta_description(self) -> str:
         """
         Analyze the meta description of the website
@@ -101,3 +103,25 @@ class Audit(WebPage):
             message.append("H1 tag is present")
 
         return score, message
+
+    def analyze_title(self):
+        """
+        Analyze the title of the website
+        Args:
+        url (str): url of the website
+        html (str): html content of the website
+        Returns:
+        str: title of the website
+        """
+        if self.title is None:
+            self.title = ""
+        if self.title:
+
+            if len(self.title) == 0:
+                return "empty"
+            elif len(self.title) > 0 or len(self.title) <= 29:
+                return "short"
+            elif len(self.title) >= 30 or len(self.title) <= 60:
+                return "correct length"
+            else:
+                return "long"

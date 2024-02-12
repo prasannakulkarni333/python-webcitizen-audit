@@ -34,9 +34,11 @@ class Webpage:
         import re
 
         all_links = self.soup.find_all("a", href=True)
+        all_links = [x.get("href") for x in all_links]
         netloc = urlparse(self.url).netloc
         data = [
-            f"https://{netloc}{x}" if x.startswith("//") else x for x in list(set(data))
+            f"https://{netloc}{x}" if x.startswith("//") else x
+            for x in list(set(all_links))
         ]
 
         return {
@@ -185,25 +187,3 @@ class Webpage:
             },
         )
         return json_html
-
-    def analyze_title(self):
-        """
-        Analyze the title of the website
-        Args:
-        url (str): url of the website
-        html (str): html content of the website
-        Returns:
-        str: title of the website
-        """
-        if self.title is None:
-            self.title = ""
-        if self.title:
-
-            if len(self.title) == 0:
-                return "empty"
-            elif len(self.title) > 0 or len(self.title) <= 29:
-                return "short"
-            elif len(self.title) >= 30 or len(self.title) <= 60:
-                return "correct length"
-            else:
-                return "long"
