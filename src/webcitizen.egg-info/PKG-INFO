@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: webcitizen
-Version: 0.0.37
+Version: 0.0.50
 Summary: SEO audits for websites using Python.
 Author-email: Prasanna Kulkarni <prasanna.k158@gmail.com>
 Project-URL: Homepage, https://github.com/prasannakulkarni333/python-webcitizen-audit
@@ -12,6 +12,7 @@ Description-Content-Type: text/markdown
 License-File: LICENSE
 Requires-Dist: beautifulsoup4
 Requires-Dist: newspaper3k
+Requires-Dist: pyap
 
 Not yet ready to be used. This is a work in progress.
 
