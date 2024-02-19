@@ -15,10 +15,11 @@ class Webpage:
         html: Optional[str] = None,
         **kwargs,
     ) -> None:
-        html = html.replace("<br>", " ").replace("<br/>", " ").replace("<br />", " ")
         self.html = html
         if self.html is not None:
-
+            html = (
+                html.replace("<br>", " ").replace("<br/>", " ").replace("<br />", " ")
+            )
             article = Article(url)
             self.soup = bs4.BeautifulSoup(self.html, "html.parser")
             article.set_html(self.html)
@@ -35,6 +36,7 @@ class Webpage:
             else kwargs.get("meta_description")
         )
         self.h1 = "" if kwargs.get("h1") is None else kwargs.get("h1")
+        self.h2 = "" if kwargs.get("h2") is None else kwargs.get("h2")
 
     def parse_self_from_html(self):
         parsed = self.json_html()
@@ -44,7 +46,7 @@ class Webpage:
             setattr(self, keys[i], values[i])
 
     def __str__(self):
-        return f"url: {self.url}, text: {self.text[:100]}..."
+        return f"url: {self.url}, ..."
 
     def filter_links(self):
         all_links = self.soup.find_all("a", href=True)
@@ -88,11 +90,18 @@ class Webpage:
         _ = urlparse(self.url)
         dict_ = {
             "domain": _.netloc,
-            "root_path": _.path.split("/")[1] if len(_.path.split("/")) > 1 else None,
+            "page_path_1": (
+                _.path if len(_.path.split("/")) == 0 else _.path.split("/")[1]
+            ),
             "full_path": _.path,
             "scheme": _.scheme,
             "scheme_domain": _.scheme,
             "base_url": f"{_.scheme}://{_.netloc}",
+            "page_path_2": _.path.split("/")[2] if len(_.path.split("/")) > 2 else None,
+            "page_path_3": _.path.split("/")[3] if len(_.path.split("/")) > 4 else None,
+            "page_path_4": _.path.split("/")[4] if len(_.path.split("/")) > 5 else None,
+            "query": _.query,
+            "fragment": _.fragment,
         }
         if kwargs.get("return_only"):
             v = kwargs.get("return_only")
@@ -155,7 +164,7 @@ class Webpage:
         soup = self.soup
         phones = re.findall(r"[\+\(]?[1-9][0-9 .\-\(\)]{8,}[0-9]", self.text)
         json_html = {
-            "phone_numbers": phones if len(phones) > 0 else None,
+            "phone_numbers": phones[0:3] if len(phones) > 0 else None,
             "addresses": str(addresses) if len(addresses) > 0 else None,
             "emails": (emails) if len(emails) > 0 else None,
             "h1": [replace_escape_chars(i.text.strip()) for i in soup.find_all("h1")],
@@ -200,6 +209,25 @@ class Webpage:
 
         return json_html
 
+    def analyze_url(self):
+        # long url
+        result = ""
+        url = self.url
+        if len(url) > 75:
+            result = result + " long"
+        # url containing underscore
+        if "_" in url:
+            result = result + " underscore"
+        # url containing query
+        if "?" in url:
+            result = result + " query"
+        # urls containing uppercase
+        if any(x.isupper() for x in url):
+            result = result + " uppercase"
+        if result == "":
+            result = "No issues found in the URL"
+        return result
+
     def analyze_meta_description(self) -> str:
         """
         Analyze the meta description of the website
@@ -211,10 +239,11 @@ class Webpage:
         """
         if self.meta_description is None:
             self.meta_description = ""
+        if len(self.meta_description) == 0:
+            return "empty"
         if self.meta_description:
-            if len(self.meta_description) == 0:
-                return "empty"
-            elif len(self.meta_description) > 0 or len(self.meta_description) <= 129:
+
+            if len(self.meta_description) > 0 or len(self.meta_description) <= 129:
                 return "short"
             elif len(self.meta_description) >= 130 or len(self.meta_description) <= 160:
                 return "correct length"
@@ -232,10 +261,24 @@ class Webpage:
         """
         if self.h1 is None:
             self.h1 = ""
+        if len(self.h1) == 0:
+            return "empty"
         if self.h1:
-            if len(self.h1) == 0:
-                return "empty"
-            elif len(self.h1) > 0 or len(self.h1) < 20:
+            if len(self.h1) > 0 or len(self.h1) < 20:
+                return "short"
+            elif len(self.h1) >= 20 or len(self.h1) <= 70:
+                return "correct length"
+            else:
+                return "long"
+
+    def analyze_H2(self) -> str:
+
+        if self.h2 is None:
+            self.h1 = ""
+        if len(self.h1) == 0:
+            return "empty"
+        if self.h1:
+            if len(self.h1) > 0 or len(self.h1) < 20:
                 return "short"
             elif len(self.h1) >= 20 or len(self.h1) <= 70:
                 return "correct length"
@@ -251,8 +294,9 @@ class Webpage:
         int: score
         list: message
         """
-        x = self.soup
         html = self.html
+        x = bs4.BeautifulSoup(html, "html.parser")
+
         # get meta viewport tag value
         message = []
         score = 0
@@ -317,11 +361,11 @@ class Webpage:
         """
         if self.title is None:
             self.title = ""
+        if len(self.title) == 0:
+            return "missing title"
         if self.title:
 
-            if len(self.title) == 0:
-                return "empty"
-            elif len(self.title) > 0 or len(self.title) <= 29:
+            if len(self.title) > 0 or len(self.title) <= 29:
                 return "short"
             elif len(self.title) >= 30 or len(self.title) <= 60:
                 return "correct length"
@@ -348,10 +392,11 @@ class Webpage:
 
 # import requests
 
-# url = "https://prasannakulkarni.com/"
-# response = requests.get(url)
-# html = response.text
-# web = Webpage(url=url, html=html)
-# __ = web.extract_text()
-# _ = web.json_html()
-# print(__)
+# url = "https://www.youtube.com/"
+# html = requests.get(url).content
+# with open("ht.txt", "w", encoding="utf-8") as f:
+#     f.write(str(html))
+# print(html)
+# webpage = Webpage(url, html)
+# # print(webpage.parse_self_from_html())
+# webpage.responsive_check()

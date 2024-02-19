@@ -1,3 +1,4 @@
 .pypirc
 *.csv
 *.pyc
+tests.ipynb

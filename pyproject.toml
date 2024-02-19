@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "webcitizen"
-version = "0.0.50"
+version = "0.0.51"
 description = "SEO audits for websites using Python."
 readme = "README.md"
 keywords = ["seo","accessibility","webcitizen", "webcitizen-audit", "webcitizen-python", "webcitizen-seo", "webcitizen-audit-python"]
