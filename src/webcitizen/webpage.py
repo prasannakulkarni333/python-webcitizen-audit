@@ -1,10 +1,11 @@
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urljoin
 from newspaper import Article
 import bs4
 from w3lib.html import replace_escape_chars
 from typing import Optional
 import pyap
 import re
+from urllib.parse import urljoin
 
 
 class Webpage:
@@ -16,17 +17,28 @@ class Webpage:
         **kwargs,
     ) -> None:
         self.html = html
+        self.url = url
+
         if self.html is not None:
+            # check if the html is valid
+            html = self.html
+
             html = (
-                html.replace("<br>", " ").replace("<br/>", " ").replace("<br />", " ")
+                html.replace("<br>", " ")
+                .replace("<br/>", " ")
+                .replace("<br />", " ")
+                # .replace("<p/>", "/>  /n")
             )
+            self.html = html
             article = Article(url)
             self.soup = bs4.BeautifulSoup(self.html, "html.parser")
+
             article.set_html(self.html)
             article.parse()
             article.nlp()
             self.article = article
             self.text = self.extract_text()
+            # NoneType
 
         self.url = url
         self.title = "" if kwargs.get("title") is None else kwargs.get("title")
@@ -37,10 +49,13 @@ class Webpage:
         )
         self.h1 = "" if kwargs.get("h1") is None else kwargs.get("h1")
         self.h2 = "" if kwargs.get("h2") is None else kwargs.get("h2")
+        self.canonical = (
+            "" if kwargs.get("canonical") is None else kwargs.get("canonical")
+        )
 
     def parse_self_from_html(self):
         parsed = self.json_html()
-        parsed = parsed[0]
+        # parsed = parsed[0]
         keys, values = list(parsed.keys()), list(parsed.values())
         for i in range(len(keys)):
             setattr(self, keys[i], values[i])
@@ -57,41 +72,58 @@ class Webpage:
             for x in list(set(all_links))
         ]
 
-        return {
+        output_ = {
+            "all": data,
             "external": [
                 x
                 for x in data
-                if (bool(re.match(r"https?://", x)) or bool(re.match(r"//", x)))
-                and (netloc not in x)
+                if (
+                    (bool(re.match(r"https?://", x)) or bool(re.match(r"//", x)))
+                    and (netloc not in x)
+                )
             ],
             "internal": [
-                x
+                urljoin(self.url, x)
                 for x in data
-                if (not bool(re.match(r"https?://", x)))
-                and (not bool(re.match(r"#", x)))
+                if (
+                    (not bool(re.match(r"https?://", x)))
+                    and (not bool(re.match(r"#", x)))
+                )
             ],
             "internal_same_domain": [
                 x
                 for x in data
-                if (not bool(re.match(r"https?://", x)))
-                and (not bool(re.match(r"#", x)))
-                and (netloc in x)
+                if (
+                    (not bool(re.match(r"https?://", x)))
+                    and (not bool(re.match(r"#", x)))
+                    and (netloc in x)
+                )
             ],
             "external-domains": [
                 urlparse(x).scheme + "://" + urlparse(x).netloc + "/"
                 for x in data
-                if (bool(re.match(r"https?://", x)) or bool(re.match(r"//", x)))
-                and (netloc not in x)
+                if (
+                    (bool(re.match(r"https?://", x)) or bool(re.match(r"//", x)))
+                    and (netloc not in x)
+                )
             ],
         }
+        # if any of output_ values is empty, replace with None
+        for k, v in output_.items():
+            if len(v) == 0:
+                output_[k] = None
+
+        return output_
 
     def unpack_url(self, *args, **kwargs):
 
         _ = urlparse(self.url)
+
         dict_ = {
             "domain": _.netloc,
+            "homepage": _.scheme + "://" + _.netloc + "/",
             "page_path_1": (
-                _.path if len(_.path.split("/")) == 0 else _.path.split("/")[1]
+                "/" if len(_.path.split("/")) == 1 else _.path.split("/")[1]
             ),
             "full_path": _.path,
             "scheme": _.scheme,
@@ -112,6 +144,8 @@ class Webpage:
     def extract_text(self) -> str:
 
         new = self.soup
+        # add space after closing tag
+
         new = replace_escape_chars(new.text, replace_by=" ")
         return " ".join(new.split())
 
@@ -163,7 +197,25 @@ class Webpage:
         # get all h1, h2, h3, h4, h5, h6, p, img, a, meta, link, script, style, title, keywords, description
         soup = self.soup
         phones = re.findall(r"[\+\(]?[1-9][0-9 .\-\(\)]{8,}[0-9]", self.text)
+        # og = {i.get("property"): i.get("content") for i in og}
+        og_site_name = soup.find_all("meta", {"property": "og:site_name"})
+        og_title = soup.find_all("meta", {"property": "og:title"})
+        import json
+
+        data = [
+            json.loads(x.string)
+            for x in soup.find_all("script", type="application/ld+json")
+        ]
+        if len(data) > 0:
+            print("Warning: more than one ld+json object found")
+            data_name = data[0]["@graph"][0]["name"]
         json_html = {
+            "business_name": (
+                og_site_name[0]["content"]
+                if og_site_name
+                else og_title[0]["content"] if og_title else data_name
+            ),
+            "json_ld": data if data else None,
             "phone_numbers": phones[0:3] if len(phones) > 0 else None,
             "addresses": str(addresses) if len(addresses) > 0 else None,
             "emails": (emails) if len(emails) > 0 else None,
@@ -173,7 +225,9 @@ class Webpage:
             "h4": [replace_escape_chars(i.text.strip()) for i in soup.find_all("h4")],
             "h5": [replace_escape_chars(i.text.strip()) for i in soup.find_all("h5")],
             "h6": [replace_escape_chars(i.text.strip()) for i in soup.find_all("h6")],
-            "title": replace_escape_chars(soup.title.text.strip()),
+            "title": [
+                replace_escape_chars(i.text.strip()) for i in soup.find_all("title")
+            ],
             "keywords": (
                 replace_escape_chars(
                     soup.find("meta", {"name": "keywords"}).get("content")
@@ -227,6 +281,25 @@ class Webpage:
         if result == "":
             result = "No issues found in the URL"
         return result
+
+    def analyze_canonical(self):
+        """
+        Analyze the canonical of the website
+        Args:
+        url (str): url of the website
+        html (str): html content of the website
+        Returns:
+        str: canonical of the website
+        """
+        if self.canonical is None:
+            self.canonical = ""
+        if len(self.canonical) == 0:
+            return "empty"
+        if self.canonical:
+            if self.canonical == self.url:
+                return "self canonical"
+            else:
+                return "points to another page"
 
     def analyze_meta_description(self) -> str:
         """
@@ -300,12 +373,17 @@ class Webpage:
         # get meta viewport tag value
         message = []
         score = 0
-        if (
-            str(x.find("meta", {"name": "viewport"}).get("content"))
-            == "width=device-width, initial-scale=1.0"
-        ):
-            score += 10
-            message.append("Meta viewport tag is set correctly")
+        if x.find("meta", {"name": "viewport"}):
+            if (
+                str(x.find("meta", {"name": "viewport"}).get("content"))
+                == "width=device-width, initial-scale=1.0"
+            ):
+                score += 10
+                message.append("Meta viewport tag is set correctly")
+            else:
+                message.append("Meta viewport tag is not set correctly")
+        else:
+            message.append("Meta viewport tag is not present")
         # check if there are media queries in the html
         if "@media" in html:
 
@@ -388,15 +466,3 @@ class Webpage:
             "h1": self.analyze_H1(),
         }
         return results
-
-
-# import requests
-
-# url = "https://www.youtube.com/"
-# html = requests.get(url).content
-# with open("ht.txt", "w", encoding="utf-8") as f:
-#     f.write(str(html))
-# print(html)
-# webpage = Webpage(url, html)
-# # print(webpage.parse_self_from_html())
-# webpage.responsive_check()
