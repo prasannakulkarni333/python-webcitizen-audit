@@ -1,5 +1,4 @@
 from urllib.parse import urlparse, urljoin
-from newspaper import Article
 import bs4
 from w3lib.html import replace_escape_chars
 from typing import Optional
@@ -30,13 +29,8 @@ class Webpage:
                 # .replace("<p/>", "/>  /n")
             )
             self.html = html
-            article = Article(url)
             self.soup = bs4.BeautifulSoup(self.html, "html.parser")
 
-            article.set_html(self.html)
-            article.parse()
-            article.nlp()
-            self.article = article
             self.text = self.extract_text()
             # NoneType
 
@@ -152,29 +146,6 @@ class Webpage:
     def extract_article_text(self) -> str:
         return self.article.text
 
-    def json_nltk_article(self) -> dict:
-
-        article = self.article
-
-        _ = {
-            "keywords": article.keywords,
-            "summary": article.summary,
-            "text": article.text,
-            "title": article.title,
-            "authors": article.authors,
-            "publish_date": str(article.publish_date),
-            "top_image": article.top_image,
-            "meta_keywords": article.meta_keywords,
-            "meta_description": article.meta_description,
-            "meta_lang": article.meta_lang,
-            "meta_favicon": article.meta_favicon,
-            "canonical_link": article.canonical_link,
-            "tags": list(article.tags),
-            "movies": article.movies,
-            "imgs": list(article.imgs),
-        }
-        return _
-
     def json_html(self, find_img_sizes=False) -> dict:
         base_url = self.unpack_url(return_only="base_url")
         images = self.soup.find_all("img")
@@ -196,26 +167,28 @@ class Webpage:
 
         # get all h1, h2, h3, h4, h5, h6, p, img, a, meta, link, script, style, title, keywords, description
         soup = self.soup
+        print("worked till soup")
         phones = re.findall(r"[\+\(]?[1-9][0-9 .\-\(\)]{8,}[0-9]", self.text)
-        # og = {i.get("property"): i.get("content") for i in og}
         og_site_name = soup.find_all("meta", {"property": "og:site_name"})
         og_title = soup.find_all("meta", {"property": "og:title"})
-        import json
+        business_name = (
+            og_site_name[0]["content"]
+            if og_site_name
+            else og_title[0]["content"] if og_title else None
+        )
+        try:
+            meta_description = (
+                replace_escape_chars(
+                    soup.find("meta", {"name": "description"}).get("content")
+                )
+                if soup.find("meta", {"name": "description"})
+                else None
+            )
+        except:
+            meta_description = None
 
-        data = [
-            json.loads(x.string)
-            for x in soup.find_all("script", type="application/ld+json")
-        ]
-        if len(data) > 0:
-            print("Warning: more than one ld+json object found")
-            data_name = data[0]["@graph"][0]["name"]
         json_html = {
-            "business_name": (
-                og_site_name[0]["content"]
-                if og_site_name
-                else og_title[0]["content"] if og_title else data_name
-            ),
-            "json_ld": data if data else None,
+            "business_name": business_name if business_name else None,
             "phone_numbers": phones[0:3] if len(phones) > 0 else None,
             "addresses": str(addresses) if len(addresses) > 0 else None,
             "emails": (emails) if len(emails) > 0 else None,
@@ -235,13 +208,7 @@ class Webpage:
                 if soup.find("meta", {"name": "keywords"})
                 else None
             ),
-            "meta_description": (
-                replace_escape_chars(
-                    soup.find("meta", {"name": "description"}).get("content")
-                )
-                if soup.find("meta", {"name": "description"})
-                else None
-            ),
+            "meta_description": meta_description,
             "robots": (
                 replace_escape_chars(
                     soup.find("meta", {"name": "robots"}).get("content")

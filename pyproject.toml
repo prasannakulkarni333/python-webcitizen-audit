@@ -10,7 +10,6 @@ readme = "README.md"
 keywords = ["seo","accessibility","webcitizen", "webcitizen-audit", "webcitizen-python", "webcitizen-seo", "webcitizen-audit-python"]
 dependencies = [
     "beautifulsoup4",
-    "newspaper3k",
     "pyap",
 ]
 authors = [
