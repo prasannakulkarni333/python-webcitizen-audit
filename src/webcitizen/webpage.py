@@ -66,41 +66,28 @@ class Webpage:
             for x in list(set(all_links))
         ]
 
+        socials = {}
+        for x in data:
+            socials_netlocs = [
+                "facebook",
+                "twitter",
+                "instagram",
+                "linkedin",
+                "youtube",
+            ]
+            for netloc in socials_netlocs:
+                if netloc in x:
+                    socials.update({netloc: x})
+
+        internal = []
+        all_joined = [urljoin(self.url, x) for x in data]
+        print(all_joined, "all_joined")
+        internal = list(set([x for x in all_joined if netloc == urlparse(x).netloc]))
+        print(internal)
         output_ = {
             "all": data,
-            "external": [
-                x
-                for x in data
-                if (
-                    (bool(re.match(r"https?://", x)) or bool(re.match(r"//", x)))
-                    and (netloc not in x)
-                )
-            ],
-            "internal": [
-                urljoin(self.url, x)
-                for x in data
-                if (
-                    (not bool(re.match(r"https?://", x)))
-                    and (not bool(re.match(r"#", x)))
-                )
-            ],
-            "internal_same_domain": [
-                x
-                for x in data
-                if (
-                    (not bool(re.match(r"https?://", x)))
-                    and (not bool(re.match(r"#", x)))
-                    and (netloc in x)
-                )
-            ],
-            "external-domains": [
-                urlparse(x).scheme + "://" + urlparse(x).netloc + "/"
-                for x in data
-                if (
-                    (bool(re.match(r"https?://", x)) or bool(re.match(r"//", x)))
-                    and (netloc not in x)
-                )
-            ],
+            "socials_web": socials,
+            "external": [x for x in data if ((netloc not in x))],
         }
         # if any of output_ values is empty, replace with None
         for k, v in output_.items():
@@ -142,9 +129,6 @@ class Webpage:
 
         new = replace_escape_chars(new.text, replace_by=" ")
         return " ".join(new.split())
-
-    def extract_article_text(self) -> str:
-        return self.article.text
 
     def json_html(self, find_img_sizes=False) -> dict:
         base_url = self.unpack_url(return_only="base_url")
