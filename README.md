@@ -18,3 +18,6 @@ https://github.com/sethblack/python-seo-analyzer/tree/master
 
 python -m build && python -m twine upload --config-file "./.pypirc" --repository pypi dist/*
 
+## for doc
+Z:\github\python-webcitizen-audit\sphinx-docs>make html
+

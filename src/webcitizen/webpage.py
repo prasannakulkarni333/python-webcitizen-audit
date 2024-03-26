@@ -8,6 +8,17 @@ from urllib.parse import urljoin
 
 
 class Webpage:
+    """
+    Webpage class to extract information from the website
+    Attributes:
+    url (str): url of the website
+    html (str): html content of the website
+    title (str): title of the website
+    meta_description (str): meta description of the website
+    h1 (str): h1 of the website
+    h2 (str): h2 of the website
+    canonical (str): canonical of the website
+    """
 
     def __init__(
         self,
